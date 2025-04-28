@@ -1,48 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:halaman_profil_stack/gantitema.dart'; // pastikan path benar
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool _isDark = true;
+
+  void _ubahTema(bool isDark) {
+    setState(() {
+      _isDark = isDark;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: _isDark ? Colors.black : const Color.fromARGB(255, 54, 67, 73),
         body: SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 40),
 
-              // Username dan icon
+              // Username
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     '@alberts_',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: _isDark ? Colors.white : Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                  const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
                 ],
               ),
               const SizedBox(height: 20),
 
-              // Foto profil dengan badge
-              SizedBox(height: 20),
+              // Foto profil
+              const SizedBox(height: 20),
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('images/foto_Profil.jpg'),
+                backgroundImage: const AssetImage('images/foto_Profil.jpg'),
                 backgroundColor: Colors.grey,
               ),
 
               // Username lagi
-              const Text(
+              Text(
                 '@albertusradya',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(
+                  color: _isDark ? Colors.white : Colors.black,
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -57,31 +74,48 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Tombol
+              // Tombol-tombol action
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ActionButton(text: 'Edit profile'),
-                  SizedBox(width: 10),
-                  ActionButton(text: 'Share profile'),
-                  SizedBox(width: 10),
+                  const ActionButton(text: 'Edit profile'),
+                  const SizedBox(width: 10),
+                  const ActionButton(text: 'Share profile'),
+                  const SizedBox(width: 10),
                   CircleAvatar(
                     radius: 18,
                     backgroundColor: Colors.grey,
-                    child: Icon(Icons.bookmark_border, color: Colors.white),
+                    child:
+                        const Icon(Icons.bookmark_border, color: Colors.white),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
 
-              // Add bio
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  '230103086 - TI 23A3',
-                  style: TextStyle(color: Colors.grey),
+              // Bio dan tombol ganti tema
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            '230103086 - TI 23A3',
+                            style: TextStyle(
+                                color: _isDark ? Colors.grey : Colors.black54),
+                          ),
+                        ),
+                        Gantitema(onTemaChange: _ubahTema),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                  ],
                 ),
               ),
+
               const SizedBox(height: 20),
 
               // Tab bar
@@ -97,17 +131,21 @@ class ProfileScreen extends StatelessWidget {
                 height: 400,
                 child: TabBarView(
                   children: [
-                    PostGridView(),
+                    const PostGridView(),
                     Center(
                       child: Text(
                         'Private Posts',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: _isDark ? Colors.white : Colors.black,
+                        ),
                       ),
                     ),
                     Center(
                       child: Text(
                         'Liked Posts',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: _isDark ? Colors.white : Colors.black,
+                        ),
                       ),
                     ),
                   ],
@@ -121,7 +159,7 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-// Komponen statistik
+// Komponen Statistik
 class StatItem extends StatelessWidget {
   final String count;
   final String label;
@@ -150,7 +188,7 @@ class StatItem extends StatelessWidget {
   }
 }
 
-// Komponen tombol
+// Komponen Action Button
 class ActionButton extends StatelessWidget {
   final String text;
 
@@ -175,31 +213,32 @@ class ActionButton extends StatelessWidget {
   }
 }
 
-// Komponen Grid Posting
+// Komponen Grid Postingan
 class PostGridView extends StatelessWidget {
   const PostGridView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final images = [
+      'images/foto 1.jpg',
+      'images/foto 2.jpg',
+      'images/foto 3.jpg',
+      'images/foto 4.jpg',
+      'images/foto 5.jpg',
+      'images/foto 6.jpg',
+      'images/foto 7.jpg',
+      'images/foto 8.jpg',
+      'images/foto 9.jpg',
+    ];
+
     return GridView.builder(
-      itemCount: 9,
+      itemCount: images.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 2,
         mainAxisSpacing: 2,
       ),
       itemBuilder: (context, index) {
-        final images = [
-          'images/foto 1.jpg',
-          'images/foto 2.jpg',
-          'images/foto 3.jpg',
-          'images/foto 4.jpg',
-          'images/foto 5.jpg',
-          'images/foto 6.jpg',
-          'images/foto 7.jpg',
-          'images/foto 8.jpg',
-          'images/foto 9.jpg',
-        ];
         return Container(
           decoration: BoxDecoration(
             image: DecorationImage(
